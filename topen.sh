@@ -26,7 +26,6 @@ gitgo)
     fi
     ;;
 *)
-    echo " "
     echo "Usage: topen.sh [OPTIONS] "
     echo "Options:"
     echo "  btop         Opens btop"
