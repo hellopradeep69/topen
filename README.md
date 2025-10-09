@@ -5,6 +5,9 @@
 - topen.sh was an idea of opening terminal api tool in few keystroke
 - but why tho ? : cuz i find my self typing btop and other tool very often
 - so i asked myself wouldn't it be great if you get what you want in few keystroke
+- instead of making a single script for btop , lf and etc
+- i made a script that can act for multiple api tool within few keystroke
+- however the options are limited for now
 - and here i brought to you topen.sh
 
 ---
@@ -15,6 +18,9 @@
 - lf - Opens a file manager in your terminal with regard of your home directory
 - gitgo - Opens the currect repo in browser if available
 - ytdown - yep as name suggest it download yt video using yt-dlp and provide beautiful ui
+- lazygit - opens lazygit for your cwd , only if git repo is present
+- twander - passing with directory as argument opens tmux session with cwd
+  (if session not exists create new one )
 
 ---
 
@@ -26,6 +32,7 @@
 4. git
 5. gh (optional)
 6. lazygit
+7. tmux (ofcourse)
 
 ---
 
@@ -67,6 +74,12 @@ chmod +x ~/.local/bin/ytdown.sh
 
 1. with tmux
 
+- basic setup in .tmux.conf
+
+- - bind-key <keymap> run-shell "tmux neww -n '<Name>' ~/.local/bin/topen.sh <option>"
+
+- example setup
+
 ```bash
 bind-key o run-shell "tmux neww -n 'lf' ~/.local/bin/topen.sh lf"
 bind-key b run-shell "tmux neww -n 'Btop' ~/.local/bin/topen.sh btop"
@@ -88,16 +101,17 @@ bind-key g run-shell "tmux neww -n 'github' ~/.local/bin/topen.sh gitgo"
 - to know more about the topen.sh , simply run the below command :-)
 
 ```bash
-topen.sh
+topen.sh --help
 ```
 
 or
 
 ```bash
-~/.local/bin/topen.sh
+~/.local/bin/topen.sh --help
 ```
 
 ### Other Awesome Script / Stuff
 
 - [Tmenux.sh](https://github.com/hellopradeep69/Tmenux.git)
+- [Lazyvimed](https://github.com/hellopradeep69/Lazyvimed.git)
 - [My tmux conf](https://github.com/hellopradeep69/tmux.git)
