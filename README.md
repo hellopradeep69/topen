@@ -25,6 +25,7 @@
 3. lf file manager
 4. git
 5. gh (optional)
+6. lazygit
 
 ---
 
@@ -70,8 +71,9 @@ chmod +x ~/.local/bin/ytdown.sh
 bind-key o run-shell "tmux neww -n 'lf' ~/.local/bin/topen.sh lf"
 bind-key b run-shell "tmux neww -n 'Btop' ~/.local/bin/topen.sh btop"
 bind-key g run-shell "tmux neww -n 'github' ~/.local/bin/topen.sh gitgo"
-bind-key f run-shell "tmux neww -n 'Ytdown' ~/.local/bin/tmenu2.sh"
 ```
+
+- more option read [Help]
 
 2. without tmux
 
