@@ -2,11 +2,11 @@
 
 ### Introduction
 
-- topen.sh was an idea of opening terminal api tool in few keystroke
+- topen.sh was an idea of opening terminal TUI tool in few keystroke
 - but why tho ? : cuz i find my self typing btop and other tool very often
 - so i asked myself wouldn't it be great if you get what you want in few keystroke
-- instead of making a single script for btop , lf and etc
-- i made a script that can act for multiple api tool within few keystroke
+- instead of making a single script for btop , lf(file manager) and etc
+- i made a script that can act for multiple TUI tool within few keystroke
 - however the options are limited for now
 - and here i brought to you topen.sh
 
