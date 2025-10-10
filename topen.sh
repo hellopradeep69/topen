@@ -2,14 +2,53 @@
 
 name="$1"
 
-twander_open() {
-    selected="$1"
+fdir_open() {
 
-    if [ ! -d "$selected" ]; then
-        echo "Directory $selected does not exist"
-        return 1
+    EXCLUDE_DIRS=(~/.tmux ~/Templates ~/.cache ~/.rustup ~/.npm ~/.zen ~/.linuxmint
+        ~/Public ~/.icons ~/Desktop ~/.cargo ~/.mozilla ~/.themes ~/.w3m ~/.golf ~/.java ~/.cursor)
+
+    # Build find exclude arguments
+    exclude_args=""
+    for d in "${EXCLUDE_DIRS[@]}"; do
+        exclude_args+=" -not -path '$d*'"
+    done
+
+    dirs=$(eval "find ~ -mindepth 1 -maxdepth 2 -type d -not -path '*/\.git*' $exclude_args 2>/dev/null")
+
+    menu="$dirs"
+
+    selected=$(echo -e "$menu" | fzf \
+        --prompt="Select tmux item (q to quit): " \
+        --border \
+        --reverse \
+        --bind "j:down,k:up,q:abort" \
+        --cycle)
+
+    [ -z "$selected" ] && exit 0
+
+    if [[ -d "$selected" ]]; then
+        dir="$selected"
+
+        rel_path=$(realpath --relative-to="$HOME" "$dir")
+        session_name=$(echo "$rel_path" | tr / _ | tr -cd '[:alnum:]_')
+
+        if tmux has-session -t "$1" "$session_name" 2>/dev/null; then
+            [ -n "$TMUX" ] && tmux switch-client -t "$session_name" || tmux attach -t "$session_name"
+        else
+            tmux new-session -d -s "$session_name" -c "$dir" -n "main"
+            [ -n "$TMUX" ] && tmux switch-client -t "$session_name" || tmux attach -t "$session_name"
+        fi
+        exit 0
+
+    else
+        # Existing session
+        session_name=$(echo "$selected" | awk '{print $1}')
+        [ -n "$TMUX" ] && tmux switch-client -t "$session_name" || tmux attach -t "$session_name"
     fi
 
+}
+
+open_it() {
     rel_path=$(realpath --relative-to="$HOME" "$selected")
     selected_name=$(echo "$rel_path" | tr / _ | tr -cd '[:alnum:]_')
 
@@ -20,7 +59,34 @@ twander_open() {
     fi
 
     tmux switch-client -t "$selected_name"
+}
 
+home_open() {
+
+    session_name="home"
+    if tmux has-session -t "$session_name" 2>/dev/null; then
+        [ -n "$TMUX" ] && tmux switch-client -t "$session_name" || tmux attach -t "$session_name"
+    else
+        tmux new-session -d -s "$session_name" -c "$HOME" -n "main"
+        [ -n "$TMUX" ] && tmux switch-client -t "$session_name" || tmux attach -t "$session_name"
+    fi
+    exit 0
+
+}
+
+twander_open() {
+    selected="$1"
+
+    if [[ "$selected" == "home" ]]; then
+        home_open
+    else
+        if [ ! -d "$selected" ]; then
+            echo "Directory $selected does not exist"
+            return 1
+        else
+            open_it
+        fi
+    fi
 }
 
 gitgo_open() {
@@ -54,6 +120,9 @@ lf)
 lazygit)
     lazygit
     ;;
+fdir)
+    fdir_open
+    ;;
 gitgo)
     gitgo_open
     ;;
@@ -69,6 +138,7 @@ readme)
     echo "  ytdown                  Opens a yt-dlp ui"
     echo "  lazygit                 Opens Lazygit for current directory"
     echo "  twander,d <directory>   Pass a Directory as argument to open in a tmux session"
+    echo "  fdir                    Opens a fuzzy finder for directory and open in tmux session"
     echo "  readme                  For more info"
     exit 0
     ;;

@@ -21,8 +21,8 @@
 - lazygit - opens lazygit for your cwd , only if git repo is present
 - twander - passing with directory as argument opens tmux session with cwd
   (if session not exists create new one )
-
----
+  - **to create a session with your home directory use home argument**
+- fdir - Fuzzy find through directory and open a tmux session in that directory
 
 ### Dependencies
 
@@ -33,6 +33,7 @@
 5. gh (optional)
 6. lazygit
 7. tmux (ofcourse)
+8. fzf
 
 ---
 
@@ -75,15 +76,16 @@ chmod +x ~/.local/bin/ytdown.sh
 1. with tmux
 
 - basic setup in .tmux.conf
-
-- - bind-key <keymap> run-shell "tmux neww -n '<Name>' ~/.local/bin/topen.sh <option>"
-
+  - bind-key {keymap} run-shell "tmux neww -n '{Name}' ~/.local/bin/topen.sh {option}"
+  - {Name} is optional
 - example setup
 
 ```bash
 bind-key o run-shell "tmux neww -n 'lf' ~/.local/bin/topen.sh lf"
 bind-key b run-shell "tmux neww -n 'Btop' ~/.local/bin/topen.sh btop"
 bind-key g run-shell "tmux neww -n 'github' ~/.local/bin/topen.sh gitgo"
+bind-key N run-shell "~/.local/bin/topen.sh d ~/Notes/"
+bind-key H run-shell "~/.local/bin/topen.sh d home"
 ```
 
 - more option read [Help]
