@@ -106,13 +106,13 @@ bind-key H run-shell "~/.local/bin/topen.sh d home"
 - code need some Dependencies such as javac for java and python3 for python etc to work
 
 - Language supported
-  - python
-  - java
-  - lua
-  - c
-  - c++
-  - js
-  - bash / sh
+  - Python
+  - Java
+  - Lua
+  - C
+  - C++
+  - Js
+  - Bash / sh
 
 - how to use it
   - You cant normally create a direct keybind in your .tmux.conf
@@ -125,7 +125,7 @@ bind-key H run-shell "~/.local/bin/topen.sh d home"
 
 - keybinds
 
-- NOTE: <leader> should be space for convenience
+- NOTE: 'leader' should be [space] for convenience
 
 1. to open in tmux window (always save before running code)
 
@@ -135,7 +135,7 @@ bind-key H run-shell "~/.local/bin/topen.sh d home"
 vim.keymap.set("n", "<leader>R", ":sil ! ~/.local/bin/topen.sh code %<CR>", {desc = "Code runner", silent = true})
 ```
 
-- OR ( it saves your file every time you run it/ still above it recommended)
+- OR ( it saves your file every time you run it/ still above is recommended)
 
 ```lua
 vim.keymap.set("n", "<leader>R", function ()
