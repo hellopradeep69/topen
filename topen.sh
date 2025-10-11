@@ -1,6 +1,44 @@
 #!/usr/bin/bash
 
+# Colors
+RED="\e[31m"
+GREEN="\e[32m"
+YELLOW="\e[33m"
+RESET="\e[0m"
+
 name="$1"
+FILE="$2"
+
+check_argument() {
+    if [ ! -f "$FILE" ]; then
+        echo -e "${RED}Error:${RESET} File not found!"
+        exit 1
+    fi
+}
+
+check_tmux() { if [ -z "$TMUX" ]; then
+    echo "Not Inside tmux session"
+else
+    session_name="$(tmux display-message -p '#S')"
+fi; }
+
+window_create() {
+
+    win_name="Code"
+    if ! tmux list-windows -t "$session_name" | grep -q "$win_name"; then
+        tmux new-window -t "$session_name" -n "$win_name"
+    else
+        tmux select-window -t "$session_name:$win_name"
+    fi
+}
+
+code_start() {
+    check_argument
+    check_tmux
+    window_create
+    tmux send-keys -t "$session_name:$win_name" "clear;code "$FILE"" Enter
+    tmux select-window -t "$session_name:$win_name"
+}
 
 fdir_open() {
 
@@ -123,6 +161,9 @@ lazygit)
 fdir)
     fdir_open
     ;;
+code)
+    code_start
+    ;;
 gitgo)
     gitgo_open
     ;;
@@ -139,6 +180,7 @@ readme)
     echo "  lazygit                 Opens Lazygit for current directory"
     echo "  twander,d <directory>   Pass a Directory as argument to open in a tmux session"
     echo "  fdir                    Opens a fuzzy finder for directory and open in tmux session"
+    echo "  code                    Run and show Error/Output in new tmux window for more info use readme "
     echo "  readme                  For more info"
     exit 0
     ;;
