@@ -106,13 +106,13 @@ bind-key H run-shell "~/.local/bin/topen.sh d home"
 - code need some Dependencies such as javac for java and python3 for python etc to work
 
 - Language supported
-- - python
-- - java
-- - lua
-- - c
-- - c++
-- - js
-- - bash / sh
+  - python
+  - java
+  - lua
+  - c
+  - c++
+  - js
+  - bash / sh
 
 - how to use it
   - You cant normally create a direct keybind in your .tmux.conf
