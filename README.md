@@ -3,7 +3,7 @@
 ### Introduction
 
 - topen.sh was an idea of opening terminal TUI tool in few keystroke
-- but why tho ? : cuz i find my self typing btop and other tool very often
+- but why tho ? : cuz i find myself typing btop and other tool very often
 - so i asked myself wouldn't it be great if you get what you want in few keystroke
 - instead of making a single script for btop , lf(file manager) and etc
 - i made a script that can act for multiple TUI tool within few keystroke
@@ -23,7 +23,7 @@
   (if session not exists create new one )
   - **to create a session with your home directory use home argument**
 - fdir - Fuzzy find through directory and open a tmux session in that directory
-- code - It act as Compiler/Interpreter and provide output / errors for your code
+- [code](https://github.com/hellopradeep69/topen?tab=readme-ov-file#code-tool) - It act as Compiler/Interpreter and provide output / errors for your code
 
 ### Dependencies
 
@@ -91,7 +91,7 @@ bind-key N run-shell "~/.local/bin/topen.sh d ~/Notes/"
 bind-key H run-shell "~/.local/bin/topen.sh d home"
 ```
 
-- more option read [Help]
+- more option read [Help](https://github.com/hellopradeep69/topen?tab=readme-ov-file#help)
 
 2. without tmux
 
