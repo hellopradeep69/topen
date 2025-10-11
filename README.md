@@ -115,13 +115,13 @@ bind-key H run-shell "~/.local/bin/topen.sh d home"
 - - bash / sh
 
 - how to use it
-- - You cant normally create a direct keybind in your .tmux.conf
-- - i am still working on it
-- - it is useless if you bind a key in your .tmux.conf as it need argument
-- - and the only i find it useful is inside neovim [The G.O.A.T editor]
-- - inside neovim while writing code you can easily operate the tool
-- - Paste the following code in your nvim config
-- - It is suggest to paste it in your Keybind config of lua i.e keymap.lua
+  - You cant normally create a direct keybind in your .tmux.conf
+  - i am still working on it
+  - it is useless if you bind a key in your .tmux.conf as it need argument
+  - and the only i find it useful is inside neovim [The G.O.A.T editor]
+  - inside neovim while writing code you can easily operate the tool
+  - Paste the following code in your nvim config
+  - It is suggest to paste it in your Keybind config of lua i.e keymap.lua
 
 - keybinds
 
