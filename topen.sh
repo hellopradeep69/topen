@@ -16,11 +16,14 @@ check_argument() {
     fi
 }
 
-check_tmux() { if [ -z "$TMUX" ]; then
-    echo "Not Inside tmux session"
-else
-    session_name="$(tmux display-message -p '#S')"
-fi; }
+check_tmux() {
+    if [ -z "$TMUX" ]; then
+        echo "Not Inside tmux session"
+        notify-send -u normal "WARN:" "Not Inside tmux session"
+    else
+        session_name="$(tmux display-message -p '#S')"
+    fi
+}
 
 window_create() {
 
@@ -141,6 +144,16 @@ gitgo_open() {
 readme_open() {
     xdg-open "https://github.com/hellopradeep69/topen.git"
 }
+
+check_tmux_open() {
+    if [ -z "$TMUX" ]; then
+        echo "Not Inside tmux session"
+        notify-send -u normal "WARN:" "Not Inside tmux session"
+        exit 1
+    fi
+}
+
+check_tmux_open
 
 case "$name" in
 btop)
