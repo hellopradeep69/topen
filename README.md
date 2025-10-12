@@ -119,12 +119,12 @@ bind-key H run-shell "~/.local/bin/topen.sh d home"
   - You cant normally create a direct keybind in your .tmux.conf
   - i am still working on it
   - it is useless if you bind a key in your .tmux.conf as it need argument
-  - and the only i find it useful is inside neovim [The G.O.A.T editor]
+  - and the only way i find it useful is inside neovim [The G.O.A.T editor]
   - inside neovim while writing code you can easily operate the tool
   - Paste the following code in your nvim config
-  - It is suggest to paste it in your Keybind config of lua i.e keymap.lua
+  - It is suggest to paste it in your Keybind config i.e keymap.lua
 
-- keybinds
+##### keybinds
 
 - NOTE: 'leader' should be [space] for convenience
 
@@ -167,7 +167,7 @@ local file = vim.api.nvim_buf_get_name(0)
 - Tmenux or topen fdir tool
 - for eg cd ~/project/java/
 - nvim main.java
-- and then hitting '<leader>R' will work
+- and then hitting 'leader R' will work
 - **_if it doesn't work report the issue_**
 
 ---

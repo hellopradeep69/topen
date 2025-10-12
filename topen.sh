@@ -35,7 +35,7 @@ window_create() {
 }
 
 code_start() {
-    check_argument
+    check_argument "$FILE"
     check_tmux
     window_create
     tmux send-keys -t "$session_name:$win_name" "clear;code "$FILE"" Enter
@@ -61,7 +61,7 @@ fdir_open() {
         --prompt="Select tmux item (q to quit): " \
         --border \
         --reverse \
-        --bind "j:down,k:up,q:abort" \
+        --bind "q:abort" \
         --cycle)
 
     [ -z "$selected" ] && exit 0
