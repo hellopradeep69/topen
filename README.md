@@ -9,6 +9,7 @@
 - i made a script that can act for multiple TUI tool within few keystroke
 - however the options are limited for now
 - and here i brought to you topen.sh
+- it opens a tmux session with home directory when used outside tmux
 
 ---
 

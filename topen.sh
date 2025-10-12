@@ -18,7 +18,6 @@ check_argument() {
 
 check_tmux() {
     if [ -z "$TMUX" ]; then
-        echo "Not Inside tmux session"
         notify-send -u normal "WARN:" "Not Inside tmux session"
     else
         session_name="$(tmux display-message -p '#S')"
@@ -147,8 +146,7 @@ readme_open() {
 
 check_tmux_open() {
     if [ -z "$TMUX" ]; then
-        echo "Not Inside tmux session"
-        notify-send -u normal "WARN:" "Not Inside tmux session"
+        home_open
         exit 1
     fi
 }
