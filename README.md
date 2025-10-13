@@ -158,10 +158,14 @@ local file = vim.api.nvim_buf_get_name(0)
 
 - NOTE: vim.cmd("startinsert") is optional it is useful exit quickly
 
-- Known Problem that might occur
+#### Known Problem that might occur
+
+1. Problem
 
 - Remember to run the desired code from the directory of the code
 - for eg nvim ~/project/java/main.java and running code will not work properly
+
+2. Solution
 
 - recommend steps to use is to cd into the dir using basic cd command or using our tool
 - Tmenux or topen fdir tool

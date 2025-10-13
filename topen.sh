@@ -28,7 +28,7 @@ window_create() {
 
     win_name="Code"
     if ! tmux list-windows -t "$session_name" | grep -q "$win_name"; then
-        tmux new-window -t "$session_name" -n "$win_name"
+        tmux new-window -t "$session_name" -n "$win_name" -c "#{pane_current_path}"
     else
         tmux select-window -t "$session_name:$win_name"
     fi
@@ -42,22 +42,34 @@ code_start() {
     tmux select-window -t "$session_name:$win_name"
 }
 
-fdir_open() {
-
+exclude_dir() {
     EXCLUDE_DIRS=(~/.tmux ~/Templates ~/.cache ~/.rustup ~/.npm ~/.zen ~/.linuxmint
         ~/Public ~/.icons ~/Desktop ~/.cargo ~/.mozilla ~/.themes ~/.w3m ~/.golf ~/.java ~/.cursor)
 
-    # Build find exclude arguments
     exclude_args=""
     for d in "${EXCLUDE_DIRS[@]}"; do
         exclude_args+=" -not -path '$d*'"
     done
 
-    dirs=$(eval "find ~ -mindepth 1 -maxdepth 2 -type d -not -path '*/\.git*' $exclude_args 2>/dev/null")
+    eval "find ~ -mindepth 1 -maxdepth 2 -type d -not -path '*/\.git*' $exclude_args 2>/dev/null"
+}
 
-    menu="$dirs"
+fzfdir() {
+    # list TMUX sessions
+    if [[ -n "${TMUX}" ]]; then
+        current_session=$(tmux display-message -p '#S')
+        tmux list-sessions -F "[TMUX] #{session_name}" 2>/dev/null | grep -vFx "[TMUX] $current_session"
+    else
+        tmux list-sessions -F "[TMUX] #{session_name}" 2>/dev/null
+    fi
 
-    selected=$(echo -e "$menu" | fzf \
+    exclude_dir
+
+}
+
+open_fzf() {
+
+    selected=$(fzfdir | fzf \
         --prompt="Select tmux item (q to quit): " \
         --border \
         --reverse \
@@ -85,7 +97,6 @@ fdir_open() {
         session_name=$(echo "$selected" | awk '{print $1}')
         [ -n "$TMUX" ] && tmux switch-client -t "$session_name" || tmux attach -t "$session_name"
     fi
-
 }
 
 open_it() {
@@ -154,28 +165,28 @@ check_tmux_open() {
 check_tmux_open
 
 case "$name" in
-btop)
+btop | -b)
     btop
     ;;
-ytdown)
+ytdown | -yt)
     ~/.local/bin/ytdown.sh
     ;;
-twander | d)
+twander | -d)
     twander_open "$2"
     ;;
 lf)
     lf ~/
     ;;
-lazygit)
+lazygit | -l)
     lazygit
     ;;
-fdir)
-    fdir_open
+fdir | -f)
+    open_fzf
     ;;
-code)
+code | -c)
     code_start
     ;;
-gitgo)
+gitgo | -g)
     gitgo_open
     ;;
 readme)
@@ -184,15 +195,15 @@ readme)
 *)
     echo "Usage: topen.sh [OPTIONS] "
     echo "Options:"
-    echo "  btop                    Opens btop"
-    echo "  lf                      Opens lf from home directory"
-    echo "  gitgo                   Opens the currect repo in browser"
-    echo "  ytdown                  Opens a yt-dlp ui"
-    echo "  lazygit                 Opens Lazygit for current directory"
-    echo "  twander,d <directory>   Pass a Directory as argument to open in a tmux session"
-    echo "  fdir                    Opens a fuzzy finder for directory and open in tmux session"
-    echo "  code                    Run and show Error/Output in new tmux window for more info use readme "
-    echo "  readme                  For more info"
+    echo "  btop,-b                  Opens btop"
+    echo "  lf                       Opens lf from home directory"
+    echo "  gitgo,-g                 Opens the currect repo in browser"
+    echo "  ytdown,-yt               Opens a yt-dlp ui"
+    echo "  lazygit,-l               Opens Lazygit for current directory"
+    echo "  twander,-d <directory>   Pass a Directory as argument to open in a tmux session"
+    echo "  fdir,-f                  Opens a fuzzy finder for directory and open in tmux session"
+    echo "  code,-c                  Run and show Error/Output in new tmux window for more info use readme "
+    echo "  readme                   For more info"
     exit 0
     ;;
 esac
