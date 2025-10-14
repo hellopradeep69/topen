@@ -88,8 +88,8 @@ chmod +x ~/.local/bin/code
 bind-key o run-shell "tmux neww -n 'lf' ~/.local/bin/topen.sh lf"
 bind-key b run-shell "tmux neww -n 'Btop' ~/.local/bin/topen.sh btop"
 bind-key g run-shell "tmux neww -n 'github' ~/.local/bin/topen.sh gitgo"
-bind-key N run-shell "~/.local/bin/topen.sh d ~/Notes/"
-bind-key H run-shell "~/.local/bin/topen.sh d home"
+bind-key N run-shell "~/.local/bin/topen.sh -d ~/Notes/"
+bind-key H run-shell "~/.local/bin/topen.sh -d home"
 ```
 
 - more option read [Help](https://github.com/hellopradeep69/topen?tab=readme-ov-file#help)

@@ -94,7 +94,7 @@ open_fzf() {
 
     else
         # Existing session
-        session_name=$(echo "$selected" | awk '{print $1}')
+        session_name=$(echo "$selected" | awk '{print $2}')
         [ -n "$TMUX" ] && tmux switch-client -t "$session_name" || tmux attach -t "$session_name"
     fi
 }
