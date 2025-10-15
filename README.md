@@ -10,6 +10,7 @@
 - however the options are limited for now
 - and here i brought to you topen.sh
 - it opens a tmux session with home directory when used outside tmux
+- if executing topen outside will create a tmux session with your home directory
 
 ---
 
@@ -25,6 +26,7 @@
   - **to create a session with your home directory use home argument**
 - fdir - Fuzzy find through directory and open a tmux session in that directory
 - [code](https://github.com/hellopradeep69/topen?tab=readme-ov-file#code-tool) - It act as Compiler/Interpreter and provide output / errors for your code
+- readme - Hey ! i am readme
 
 ### Dependencies
 
@@ -99,6 +101,21 @@ bind-key H run-shell "~/.local/bin/topen.sh -d home"
 - just learn using tmux its beautiful and very productive
 - it aint that tough !
 - '\_'
+
+---
+
+### twander/-d
+
+- twander is an Awesome tool in topen that will let you to create a tmux session for the
+  given directory as an argument
+
+- You can create a tmux server for your Home directory using home as an argument in topen
+
+- For eg
+
+```bash
+topen.sh -d home
+```
 
 ---
 
