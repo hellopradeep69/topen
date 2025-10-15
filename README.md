@@ -67,7 +67,7 @@ mv ~/topen/* ~/.local/bin/.
 ```bash
 chmod +x ~/.local/bin/topen.sh
 chmod +x ~/.local/bin/ytdown.sh
-chmod +x ~/.local/bin/code
+chmod +x ~/.local/bin/code.sh
 ```
 
 ---
@@ -164,6 +164,8 @@ local file = vim.api.nvim_buf_get_name(0)
 
 - Remember to run the desired code from the directory of the code
 - for eg nvim ~/project/java/main.java and running code will not work properly
+- be Caution not to open any other in Code window such as nvim etc
+- it might conflict and will not work as properly
 
 2. Solution
 
@@ -172,6 +174,7 @@ local file = vim.api.nvim_buf_get_name(0)
 - for eg cd ~/project/java/
 - nvim main.java
 - and then hitting 'leader R' will work
+- Make sure you dont work in Code window in tmux
 - **_if it doesn't work report the issue_**
 
 ---

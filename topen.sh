@@ -38,7 +38,7 @@ code_start() {
     check_argument "$FILE"
     check_tmux
     window_create
-    tmux send-keys -t "$session_name:$win_name" "clear;code "$FILE"" Enter
+    tmux send-keys -t "$session_name:$win_name" "clear;code.sh "$FILE"" Enter
     tmux select-window -t "$session_name:$win_name"
 }
 
