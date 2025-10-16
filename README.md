@@ -10,7 +10,7 @@
 - however the options are limited for now
 - and here i brought to you topen.sh
 - it opens a tmux session with home directory when used outside tmux
-- if executing topen outside will create a tmux session with your home directory
+- if executing topen outside , topen will create a tmux session with your home directory
 
 ---
 
@@ -19,7 +19,7 @@
 - Btop - Opens a beautiful btop gui in your terminal
 - lf - Opens a file manager in your terminal with regard of your home directory
 - gitgo - Opens the currect repo in browser if available
-- ytdown - yep as name suggest it download yt video using yt-dlp and provide beautiful ui
+- ytdown - yep as name suggest it download yt video/audio using yt-dlp and beautiful ui
 - lazygit - opens lazygit for your cwd , only if git repo is present
 - twander - passing with directory as argument opens tmux session with cwd
   (if session not exists create new one )
@@ -173,7 +173,7 @@ local file = vim.api.nvim_buf_get_name(0)
  end, { desc = "Code Runner" })
 ```
 
-- NOTE: vim.cmd("startinsert") is optional it is useful exit quickly
+- NOTE: vim.cmd("startinsert") is optional it is to useful exit quickly
 
 #### Known Problem that might occur
 
@@ -197,9 +197,9 @@ local file = vim.api.nvim_buf_get_name(0)
 3. Solved
 
 - previous problem that conflict while doing other work in code window is cleared
-  - [How] incase you are wondering how now the code kill the pane every time you execute it
+  - [How] incase you are wondering how now the code kill the pane and reopen every time you execute it
   - [Note] still a good habit to not do work in code pane
-  - [Why] as it will kill the pane without confirmation , and your previous work will be gone
+  - [Why] as it will kill the pane without confirmation , and your precious work will be gone
 
 ---
 
