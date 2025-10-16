@@ -27,6 +27,8 @@ check_tmux() {
 window_create() {
 
     win_name="Code"
+    tmux kill-pane -t "$session_name:$win_name"
+
     if ! tmux list-windows -t "$session_name" | grep -q "$win_name"; then
         tmux new-window -t "$session_name" -n "$win_name" -c "#{pane_current_path}"
     else

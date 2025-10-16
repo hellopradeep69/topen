@@ -181,8 +181,8 @@ local file = vim.api.nvim_buf_get_name(0)
 
 - Remember to run the desired code from the directory of the code
 - for eg nvim ~/project/java/main.java and running code will not work properly
-- be Caution not to open any other in Code window such as nvim etc
-- it might conflict and will not work as properly
+- be Caution not to open any other in Code window such as nvim etc [Solved]
+- it might conflict and will not work as properly [Solved]
 
 2. Solution
 
@@ -193,6 +193,13 @@ local file = vim.api.nvim_buf_get_name(0)
 - and then hitting 'leader R' will work
 - Make sure you dont work in Code window in tmux
 - **_if it doesn't work report the issue_**
+
+3. Solved
+
+- previous problem that conflict while doing other work in code window is cleared
+  - [How] incase you are wondering how now the code kill the pane every time you execute it
+  - [Note] still a good habit to not do work in code pane
+  - [Why] as it will kill the pane without confirmation , and your previous work will be gone
 
 ---
 
