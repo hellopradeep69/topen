@@ -81,8 +81,7 @@ open_fzf() {
     if [[ -d "$selected" ]]; then
         dir="$selected"
 
-        rel_path=$(realpath --relative-to="$HOME" "$dir")
-        session_name=$(echo "$rel_path" | tr / _ | tr -cd '[:alnum:]_')
+        session_name=$(basename "$dir" | tr . _)
 
         if tmux has-session -t "$1" "$session_name" 2>/dev/null; then
             [ -n "$TMUX" ] && tmux switch-client -t "$session_name" || tmux attach -t "$session_name"
@@ -100,8 +99,7 @@ open_fzf() {
 }
 
 open_it() {
-    rel_path=$(realpath --relative-to="$HOME" "$selected")
-    selected_name=$(echo "$rel_path" | tr / _ | tr -cd '[:alnum:]_')
+    selected_name=$(basename "$selected" | tr . _)
 
     # echo "$selected_name"
     if ! tmux has-session -t "$selected_name" 2>/dev/null; then
