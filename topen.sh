@@ -62,7 +62,7 @@ fzfdir() {
         current_session=$(tmux display-message -p '#S')
         tmux list-sessions -F "[TMUX] #{session_name}" 2>/dev/null | grep -vFx "[TMUX] $current_session"
     else
-        tmux list-sessions -F "[TMUX] #{session_name}" 2>/dev/null
+        tmux list-sessions -F "[TMUX] #{session_name}" 2>/dev/null | sort
     fi
 
     exclude_dir
@@ -76,6 +76,7 @@ open_fzf() {
         --border \
         --reverse \
         --bind "q:abort" \
+        --inline-info \
         --cycle)
 
     [ -z "$selected" ] && exit 0
