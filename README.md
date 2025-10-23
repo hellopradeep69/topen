@@ -26,6 +26,7 @@
   - **to create a session with your home directory use home argument**
 - fdir - Fuzzy find through directory and open a tmux session in that directory
 - [code](https://github.com/hellopradeep69/topen?tab=readme-ov-file#code-tool) - It act as Compiler/Interpreter and provide output / errors for your code
+- Tarpoon - tmux-harpoon that that allow you to tag a session and swap between them easily
 - readme - Hey ! i am readme
 
 ### Dependencies
@@ -109,12 +110,35 @@ bind-key H run-shell "~/.local/bin/topen.sh -d home"
 - twander is an Awesome tool in topen that will let you to create a tmux session for the
   given directory as an argument
 
+- For eg
+
+```bash
+topen.sh -d ~/Documents/
+```
+
 - You can create a tmux server for your Home directory using home as an argument in topen
 
 - For eg
 
 ```bash
 topen.sh -d home
+```
+
+---
+
+### Tarpoon
+
+- Like [ Harpoon ](https://github.com/ThePrimeagen/harpoon/tree/harpoon2) , with tarpoon you can tag/edit a session and
+  swap between them
+- Nvim is used to edit in edit option
+
+- Example Usage
+
+```.tmux.conf
+bind-key h run-shell "tmux new-window -n 'Tarpoon' 'bash ~/.local/bin/topen.sh -h'"
+bind-key j run-shell "tmux new-window -n 'Tarpoon' 'bash ~/.local/bin/topen.sh -h 1'"
+bind-key k run-shell "tmux new-window -n 'Tarpoon' 'bash ~/.local/bin/topen.sh -h 2'"
+bind-key H run-shell "tmux new-window -n 'Tarpoon' 'bash ~/.local/bin/topen.sh -H'"
 ```
 
 ---

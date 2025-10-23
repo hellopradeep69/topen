@@ -9,6 +9,11 @@ RESET="\e[0m"
 name="$1"
 FILE="$2"
 
+# for tarpoon
+CACHE="$HOME/.cache/tarpoon_cache"
+touch "$CACHE"
+
+# Code
 check_argument() {
     if [ ! -f "$FILE" ]; then
         echo -e "${RED}Error:${RESET} File not found!"
@@ -44,6 +49,7 @@ code_start() {
     tmux select-window -t "$session_name:$win_name"
 }
 
+# fuzzy finder tmux [Tmux sessionizer]
 exclude_dir() {
     EXCLUDE_DIRS=(~/.tmux ~/Templates ~/.cache ~/.rustup ~/.npm ~/.zen ~/.linuxmint
         ~/Public ~/.icons ~/Desktop ~/.cargo ~/.mozilla ~/.themes ~/.w3m ~/.golf ~/.java ~/.cursor)
@@ -60,7 +66,8 @@ fzfdir() {
     # list TMUX sessions
     if [[ -n "${TMUX}" ]]; then
         current_session=$(tmux display-message -p '#S')
-        tmux list-sessions -F "[TMUX] #{session_name}" 2>/dev/null | grep -vFx "[TMUX] $current_session"
+        # tmux list-sessions -F "[TMUX] #{session_name}" 2>/dev/null | grep -vFx "[TMUX] $current_session" | sort
+        tmux list-sessions -F "[TMUX] #{session_name} #{?session_attached,*, } " 2>/dev/null | sort
     else
         tmux list-sessions -F "[TMUX] #{session_name}" 2>/dev/null | sort
     fi
@@ -75,6 +82,7 @@ open_fzf() {
         --prompt="Select tmux item (q to quit): " \
         --border \
         --reverse \
+        --no-sort \
         --bind "q:abort" \
         --inline-info \
         --cycle)
@@ -126,6 +134,7 @@ home_open() {
 
 }
 
+# directory
 twander_open() {
     selected="$1"
 
@@ -141,6 +150,7 @@ twander_open() {
     fi
 }
 
+# open git repo
 gitgo_open() {
     url=$(git remote get-url origin 2>/dev/null)
 
@@ -152,11 +162,119 @@ gitgo_open() {
     fi
 }
 
+# open git repo for topen
 readme_open() {
     xdg-open "https://github.com/hellopradeep69/topen.git"
 }
 
+# Harpoon
+Def_tarpoon() {
+    grep -vxF "edit" "$CACHE" >"${CACHE}.tmp"
+    mv "${CACHE}.tmp" "$CACHE"
+    echo "edit" >>"$CACHE"
+}
+
+List_tarpoon() {
+    # cat "$CACHE" | nl
+    cat -n "$CACHE"
+}
+
+Add_tarpoon() {
+    dir="$PWD"
+    basedir="$(basename "$dir")"
+
+    if ! grep -qxF "$dir" "$CACHE"; then
+        echo "$dir" >>"$CACHE"
+        notify-send "Added to tarpoon" "$basedir"
+    else
+        notify-send "Already exists" "$basedir"
+    fi
+
+}
+
+Home_tarpoon() {
+    local session_name="home"
+
+    if tmux has-session -t "$session_name" 2>/dev/null; then
+        [ -n "$TMUX" ] && tmux switch-client -t "$session_name" || tmux attach -t "$session_name"
+    else
+        tmux new-session -d -s "$session_name" -c "$HOME" -n "main"
+        [ -n "$TMUX" ] && tmux switch-client -t "$session_name" || tmux attach -t "$session_name"
+    fi
+    exit 0
+
+}
+
+Make_tarpoon() {
+    local path="$1"
+    session_name=$(basename "$path" | tr . _)
+
+    if ! tmux has-session -t "$session_name" 2>/dev/null; then
+        tmux new-session -ds "$session_name" -c "$path"
+    fi
+    tmux switch-client -t "$session_name"
+}
+
+Check_tarpoon() {
+    local path="$1"
+
+    if [[ "$HOME" = "$path" ]]; then
+        Home_tarpoon
+    else
+        Make_tarpoon "$path"
+    fi
+}
+
+Jump_tarpoon() {
+
+    local path=$(
+        List_tarpoon | fzf \
+            --bind "q:abort" \
+            --reverse \
+            --inline-info \
+            --tmux center | awk '{print $2}'
+    )
+
+    # echo "$path"
+
+    if [ -d "$path" ]; then
+        if [ -n "$TMUX" ]; then
+            Check_tarpoon "$path"
+        fi
+    elif [[ "$path" = "edit" ]]; then
+        tmux new-window -n "edit" nvim "$CACHE"
+    fi
+}
+
+Switch_tarpoon() {
+
+    index="$1"
+    len_index=$(List_tarpoon | awk '{print $1}' | tail -n 1)
+    len=$((len_index - 1))
+    # echo "$len_index" && echo "$index" && echo "$len"
+    if [[ "$index" -le 0 || "$index" -gt "$len" ]]; then
+        notify-send "Invalid Index" "$index"
+        exit 0
+    fi
+
+    path=$(List_tarpoon | awk -v i="$index" 'NR==i {print $2}')
+    # echo "$path"
+
+    Check_tarpoon "$path"
+}
+
+Combine_tarpoon() {
+    if [[ -n "$1" ]]; then
+        Switch_tarpoon "$1"
+    else
+        Jump_tarpoon
+    fi
+
+}
+
 check_tmux_open() {
+    Def_tarpoon
+
     if [ -z "$TMUX" ]; then
         home_open
         exit 1
@@ -193,8 +311,16 @@ gitgo | -g)
 readme)
     readme_open
     ;;
+-H)
+    Add_tarpoon
+    ;;
+-h)
+    Combine_tarpoon "$2"
+    ;;
 *)
-    echo "Usage: topen.sh [OPTIONS] "
+    # echo "Usage: topen.sh [OPTIONS] "
+    echo "Usage:"
+    echo "    ${0##*/} [options] [args]"
     echo "Options:"
     echo "  btop,-b                  Opens btop"
     echo "  lf                       Opens lf from home directory"
@@ -204,6 +330,9 @@ readme)
     echo "  twander,-d <directory>   Pass a Directory as argument to open in a tmux session"
     echo "  fdir,-f                  Opens a fuzzy finder for directory and open in tmux session"
     echo "  code,-c                  Run and show Error/Output in new tmux window for more info use readme "
+    echo "  -H                       Track current tmux session"
+    echo "  -h                       List tracked sessions and choose one interactively"
+    echo "  -h <index>               Switch to the tarpoon session at the given index"
     echo "  readme                   For more info"
     exit 0
     ;;
