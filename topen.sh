@@ -52,7 +52,8 @@ code_start() {
 # fuzzy finder tmux [Tmux sessionizer]
 exclude_dir() {
     EXCLUDE_DIRS=(~/.tmux ~/Templates ~/.cache ~/.rustup ~/.npm ~/.zen ~/.linuxmint
-        ~/Public ~/.icons ~/Desktop ~/.cargo ~/.mozilla ~/.themes ~/.w3m ~/.golf ~/.java ~/.cursor)
+        ~/Public ~/.icons ~/Desktop ~/.cargo ~/.mozilla ~/.themes ~/.w3m ~/.golf
+        ~/.java ~/.cursor ~/fastfetch ~/Telegram ~/.fzf ~/.dbus)
 
     exclude_args=""
     for d in "${EXCLUDE_DIRS[@]}"; do
@@ -169,29 +170,35 @@ readme_open() {
 
 # Harpoon
 Def_tarpoon() {
-    grep -vxF "edit" "$CACHE" >"${CACHE}.tmp"
+    empty="*"
+    grep -vxF "$empty edit" "$CACHE" >"${CACHE}.tmp"
     mv "${CACHE}.tmp" "$CACHE"
-    echo "edit" >>"$CACHE"
+    echo "$empty edit" >>"$CACHE"
 }
 
 List_tarpoon() {
-    # cat "$CACHE" | nl
+    cat "$CACHE"
+}
+
+Index_tarpoon() {
     cat -n "$CACHE"
 }
 
 Add_tarpoon() {
     dir="$PWD"
+    ses_name=$(tmux display-message -p '#S ')
     basedir="$(basename "$dir")"
 
-    if ! grep -qxF "$dir" "$CACHE"; then
-        echo "$dir" >>"$CACHE"
+    # echo "$ses_name"
+
+    if ! grep -qxF "$ses_name $dir" "$CACHE"; then
+        echo "$ses_name" "$dir" >>"$CACHE"
         notify-send "Added to tarpoon" "$basedir"
     else
         notify-send "Already exists" "$basedir"
     fi
 
 }
-
 Home_tarpoon() {
     local session_name="home"
 
@@ -242,14 +249,15 @@ Jump_tarpoon() {
             Check_tarpoon "$path"
         fi
     elif [[ "$path" = "edit" ]]; then
-        tmux new-window -n "edit" nvim "$CACHE"
+        exec tmux popup -E "nvim $CACHE"
+        # tmux new-window -n "edit" nvim "$CACHE"
     fi
 }
 
 Switch_tarpoon() {
 
     index="$1"
-    len_index=$(List_tarpoon | awk '{print $1}' | tail -n 1)
+    len_index=$(Index_tarpoon | awk '{print $1}' | tail -n 1)
     len=$((len_index - 1))
     # echo "$len_index" && echo "$index" && echo "$len"
     if [[ "$index" -le 0 || "$index" -gt "$len" ]]; then
@@ -257,7 +265,7 @@ Switch_tarpoon() {
         exit 0
     fi
 
-    path=$(List_tarpoon | awk -v i="$index" 'NR==i {print $2}')
+    path=$(Index_tarpoon | awk -v i="$index" 'NR==i {print $2}')
     # echo "$path"
 
     Check_tarpoon "$path"
