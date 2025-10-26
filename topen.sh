@@ -197,6 +197,15 @@ Add_tarpoon() {
     fi
 }
 
+Already_harpoon() {
+    already_session="$1"
+    current_session=$(tmux display-message -p '#S')
+    # echo "$current_session $already_session"
+    if [[ "$already_session" == "$current_session" ]]; then
+        notify-send "Already inside the session" "$current_session"
+    fi
+}
+
 Make_tarpoon() {
     # echo "$path"
     session_name="$1"
@@ -235,6 +244,8 @@ Jump_tarpoon() {
 
     # echo "$tsession"
     # echo "$tpath"
+
+    Already_harpoon "$tsession"
 
     if [ -n "$path" ]; then
         if [ -n "$TMUX" ]; then
