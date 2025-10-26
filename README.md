@@ -26,7 +26,7 @@
   - **to create a session with your home directory use home argument**
 - fdir - Fuzzy find through directory and open a tmux session in that directory
 - [code](https://github.com/hellopradeep69/topen?tab=readme-ov-file#code-tool) - It act as Compiler/Interpreter and provide output / errors for your code
-- Tarpoon - tmux-harpoon that that allow you to tag a session and swap between them easily
+- [ Tarpoon ](https://github.com/hellopradeep69/topen?tab=readme-ov-file#tarpoon) - tmux-harpoon that that allow you to tag a session and swap between them easily
 - readme - Hey ! i am readme
 
 ### Dependencies
@@ -130,7 +130,7 @@ topen.sh -d home
 
 - Like [ Harpoon ](https://github.com/ThePrimeagen/harpoon/tree/harpoon2) , with tarpoon you can tag/edit a session and
   swap between them
-- Nvim is used to edit in edit option
+- Nvim is used as an editor to edit in edit option
 
 - Example Usage
 

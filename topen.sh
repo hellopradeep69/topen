@@ -170,10 +170,9 @@ readme_open() {
 
 # Harpoon
 Def_tarpoon() {
-    empty="*"
-    grep -vxF "$empty edit" "$CACHE" >"${CACHE}.tmp"
+    grep -vxF "edit" "$CACHE" >"${CACHE}.tmp"
     mv "${CACHE}.tmp" "$CACHE"
-    echo "$empty edit" >>"$CACHE"
+    echo "edit" >>"$CACHE"
 }
 
 List_tarpoon() {
@@ -187,34 +186,21 @@ Index_tarpoon() {
 Add_tarpoon() {
     dir="$PWD"
     ses_name=$(tmux display-message -p '#S ')
-    basedir="$(basename "$dir")"
 
     # echo "$ses_name"
 
     if ! grep -qxF "$ses_name $dir" "$CACHE"; then
         echo "$ses_name" "$dir" >>"$CACHE"
-        notify-send "Added to tarpoon" "$basedir"
+        notify-send "Added to tarpoon" "$ses_name"
     else
-        notify-send "Already exists" "$basedir"
+        notify-send "Already exists" "$ses_name"
     fi
-
-}
-Home_tarpoon() {
-    local session_name="home"
-
-    if tmux has-session -t "$session_name" 2>/dev/null; then
-        [ -n "$TMUX" ] && tmux switch-client -t "$session_name" || tmux attach -t "$session_name"
-    else
-        tmux new-session -d -s "$session_name" -c "$HOME" -n "main"
-        [ -n "$TMUX" ] && tmux switch-client -t "$session_name" || tmux attach -t "$session_name"
-    fi
-    exit 0
-
 }
 
 Make_tarpoon() {
-    local path="$1"
-    session_name=$(basename "$path" | tr . _)
+    # echo "$path"
+    session_name="$1"
+    local path="$2"
 
     if ! tmux has-session -t "$session_name" 2>/dev/null; then
         tmux new-session -ds "$session_name" -c "$path"
@@ -223,12 +209,14 @@ Make_tarpoon() {
 }
 
 Check_tarpoon() {
-    local path="$1"
+    local session="$1"
+    local path="$2"
 
-    if [[ "$HOME" = "$path" ]]; then
-        Home_tarpoon
+    if [[ "$session" = "edit" ]]; then
+        # exec tmux popup -E "nvim $CACHE"
+        tmux new-window -n "edit" nvim "$CACHE"
     else
-        Make_tarpoon "$path"
+        Make_tarpoon "$session" "$path"
     fi
 }
 
@@ -239,18 +227,19 @@ Jump_tarpoon() {
             --bind "q:abort" \
             --reverse \
             --inline-info \
-            --tmux center | awk '{print $2}'
+            --tmux center
     )
 
-    # echo "$path"
+    tsession=$(echo "$path" | awk '{print $1}')
+    tpath=$(echo "$path" | awk '{print $2}')
 
-    if [ -d "$path" ]; then
+    # echo "$tsession"
+    # echo "$tpath"
+
+    if [ -n "$path" ]; then
         if [ -n "$TMUX" ]; then
-            Check_tarpoon "$path"
+            Check_tarpoon "$tsession" "$tpath"
         fi
-    elif [[ "$path" = "edit" ]]; then
-        exec tmux popup -E "nvim $CACHE"
-        # tmux new-window -n "edit" nvim "$CACHE"
     fi
 }
 
@@ -265,10 +254,13 @@ Switch_tarpoon() {
         exit 0
     fi
 
-    path=$(Index_tarpoon | awk -v i="$index" 'NR==i {print $2}')
-    # echo "$path"
+    session_name=$(Index_tarpoon | awk -v i="$index" 'NR==i {print $2}')
+    path=$(Index_tarpoon | awk -v i="$index" 'NR==i {print $3}')
 
-    Check_tarpoon "$path"
+    echo "$session_name"
+    echo "$path"
+
+    Check_tarpoon "$session_name" "$path"
 }
 
 Combine_tarpoon() {
