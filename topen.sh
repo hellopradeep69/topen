@@ -282,6 +282,46 @@ Combine_tarpoon() {
 
 }
 
+Next_tarpoon() {
+    current_session="$(tmux display-message -p '#S')"
+    total="$(Index_tarpoon | awk '{print $1}' | tail -n 1)"
+
+    current_index=$(Index_tarpoon | awk -v s="$current_session" '$2 == s {print NR}')
+    next_index=$((current_index + 1))
+
+    if [[ "$next_index" = "$total" ]]; then
+        next_index=1
+    fi
+
+    session_name=$(Index_tarpoon | awk -v i="$next_index" 'NR==i {print $2}')
+    path=$(Index_tarpoon | awk -v i="$next_index" 'NR==i {print $3}')
+
+    notify-send "Next_tarpoon" "$session_name"
+    Check_tarpoon "$session_name" "$path"
+}
+
+Previous_tarpoon() {
+
+    current_session="$(tmux display-message -p '#S')"
+    total="$(Index_tarpoon | awk '{print $1}' | tail -n 1)"
+    total=$((total - 1))
+    echo "$total"
+
+    current_index=$(Index_tarpoon | awk -v s="$current_session" '$2 == s {print NR}')
+    prev_index=$((current_index - 1))
+
+    if [[ "$prev_index" -lt 1 ]]; then
+        prev_index="$total"
+
+    fi
+
+    session_name=$(Index_tarpoon | awk -v i="$prev_index" 'NR==i {print $2}')
+    path=$(Index_tarpoon | awk -v i="$prev_index" 'NR==i {print $3}')
+
+    notify-send "Previous tarpoon" "$session_name"
+    Check_tarpoon "$session_name" "$path"
+}
+
 check_tmux_open() {
     Def_tarpoon
 
@@ -327,6 +367,12 @@ readme)
 -h)
     Combine_tarpoon "$2"
     ;;
+-hn)
+    Next_tarpoon
+    ;;
+-hp)
+    Previous_tarpoon
+    ;;
 *)
     # echo "Usage: topen.sh [OPTIONS] "
     echo "Usage:"
@@ -342,6 +388,8 @@ readme)
     echo "  code,-c                  Run and show Error/Output in new tmux window for more info use readme "
     echo "  -H                       Track current tmux session"
     echo "  -h                       List tracked sessions and choose one interactively"
+    echo "  -hn                      Jump to the next tracked session"
+    echo "  -hp                      Jump to the previous tracked session"
     echo "  -h <index>               Switch to the tarpoon session at the given index"
     echo "  readme                   For more info"
     exit 0
