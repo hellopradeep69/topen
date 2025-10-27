@@ -53,7 +53,7 @@ code_start() {
 exclude_dir() {
     EXCLUDE_DIRS=(~/.tmux ~/Templates ~/.cache ~/.rustup ~/.npm ~/.zen ~/.linuxmint
         ~/Public ~/.icons ~/Desktop ~/.cargo ~/.mozilla ~/.themes ~/.w3m ~/.golf
-        ~/.java ~/.cursor ~/fastfetch ~/Telegram ~/.fzf ~/.dbus)
+        ~/.java ~/.cursor ~/fastfetch ~/Telegram ~/.fzf ~/.dbus ~/Dot-conf/*)
 
     exclude_args=""
     for d in "${EXCLUDE_DIRS[@]}"; do
@@ -268,8 +268,7 @@ Switch_tarpoon() {
     session_name=$(Index_tarpoon | awk -v i="$index" 'NR==i {print $2}')
     path=$(Index_tarpoon | awk -v i="$index" 'NR==i {print $3}')
 
-    echo "$session_name"
-    echo "$path"
+    Already_harpoon "$session_name"
 
     Check_tarpoon "$session_name" "$path"
 }
@@ -281,6 +280,48 @@ Combine_tarpoon() {
         Jump_tarpoon
     fi
 
+}
+
+Next_tarpoon() {
+    current_session="$(tmux display-message -p '#S')"
+    total="$(Index_tarpoon | awk '{print $1}' | tail -n 1)"
+
+    current_index=$(Index_tarpoon | awk -v s="$current_session" '$2 == s {print NR}')
+    next_index=$((current_index + 1))
+    # echo "$current_index"
+    # echo "$next_index"
+
+    if [[ "$next_index" = "$total" ]]; then
+        next_index=1
+    fi
+
+    session_name=$(Index_tarpoon | awk -v i="$next_index" 'NR==i {print $2}')
+    path=$(Index_tarpoon | awk -v i="$next_index" 'NR==i {print $3}')
+
+    notify-send "Next_tarpoon" "$session_name"
+    Check_tarpoon "$session_name" "$path"
+}
+
+Previous_tarpoon() {
+
+    current_session="$(tmux display-message -p '#S')"
+    total="$(Index_tarpoon | awk '{print $1}' | tail -n 1)"
+
+    current_index=$(Index_tarpoon | awk -v s="$current_session" '$2 == s {print NR}')
+    prev_index=$((current_index - 1))
+    # echo "$current_index"
+    # echo "$next_index"
+
+    if [[ "$prev_index" -lt 1 ]]; then
+        prev_index="$total"
+
+    fi
+
+    session_name=$(Index_tarpoon | awk -v i="$next_index" 'NR==i {print $2}')
+    path=$(Index_tarpoon | awk -v i="$next_index" 'NR==i {print $3}')
+
+    notify-send "Previous tarpoon" "$session_name"
+    Check_tarpoon "$session_name" "$path"
 }
 
 check_tmux_open() {
@@ -327,6 +368,12 @@ readme)
     ;;
 -h)
     Combine_tarpoon "$2"
+    ;;
+-hn)
+    Next_tarpoon
+    ;;
+-hp)
+    Previous_tarpoon
     ;;
 *)
     # echo "Usage: topen.sh [OPTIONS] "
