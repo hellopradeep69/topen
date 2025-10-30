@@ -137,6 +137,8 @@ topen.sh -d home
 bind-key h run-shell "tmux new-window -n 'Tarpoon' 'bash ~/.local/bin/topen.sh -h'"
 bind-key j run-shell "tmux new-window -n 'Tarpoon' 'bash ~/.local/bin/topen.sh -h 1'"
 bind-key k run-shell "tmux new-window -n 'Tarpoon' 'bash ~/.local/bin/topen.sh -h 2'"
+bind-key j run-shell "tmux new-window -n 'Tarpoon' 'bash ~/.local/bin/topen.sh -hn'"
+bind-key k run-shell "tmux new-window -n 'Tarpoon' 'bash ~/.local/bin/topen.sh -hp'"
 bind-key H run-shell "tmux new-window -n 'Tarpoon' 'bash ~/.local/bin/topen.sh -H'"
 ```
 
