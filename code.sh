@@ -18,22 +18,34 @@ if [ ! -f "$FILE" ]; then
     exit 1
 fi
 
+DIR=$(dirname "$FILE")
 EXT="${FILE##*.}"
 BASENAME="${FILE%.*}"
 CLASSNAME=$(basename "$BASENAME")
+
+# Make
+if [ -f "$DIR/Makefile" ] || [ -f "$DIR/makefile" ]; then
+    echo -e "${YELLOW}Makefile detected. Running make...${RESET}"
+    (cd "$DIR" && make)
+    echo " "
+    echo -e "${GREEN}=== OUTPUT (from Makefile) ===${RESET}"
+    (cd "$DIR" && ./$(basename "$BASENAME") 2>/dev/null || true)
+    exit $?
+fi
 
 case "$EXT" in
 py)
     CMD=("python3" "$FILE")
     ;;
 java)
-    CMD=("sh" -c "javac \"$FILE\" && java \"$CLASSNAME\"")
+    CMD=("bash" -c "javac \"$FILE\" && java \"$CLASSNAME\"")
     ;;
 c)
-    CMD=("sh" -c "gcc \"$FILE\" -o \"$BASENAME\" && ./\"$BASENAME\"")
+    CMD=("bash" -c "gcc \"$FILE\" -o \"$BASENAME\" -lncurses && \"$BASENAME\"")
+    # CMD=("bash" -c "gcc \"$FILE\" -o \"$BASENAME\" && ./\"$BASENAME\"")
     ;;
 cpp)
-    CMD=("sh" -c "g++ \"$FILE\" -o \"$BASENAME\" && ./\"$BASENAME\"")
+    CMD=("bash" -c "g++ \"$FILE\" -o \"$BASENAME\" && ./\"$BASENAME\"")
     ;;
 sh)
     CMD=("bash" "$FILE")
