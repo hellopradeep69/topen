@@ -322,6 +322,13 @@ Previous_tarpoon() {
   Check_tarpoon "$session_name" "$path"
 }
 
+Session_it() {
+  tmux switch-client -t "$(
+    tmux list-sessions -F '#S #{?session_attached,*, }' |
+      fzf --preview 'tmux capture-pane -pt {} -S -50'
+  )"
+}
+
 check_tmux_open() {
   Def_tarpoon
 
@@ -361,6 +368,9 @@ gitgo | -g)
 readme)
   readme_open
   ;;
+-s)
+  Session_it
+  ;;
 -H)
   Add_tarpoon
   ;;
@@ -386,6 +396,7 @@ readme)
   echo "  twander,-d <directory>   Pass a Directory as argument to open in a tmux session"
   echo "  fdir,-f                  Opens a fuzzy finder for directory and open in tmux session"
   echo "  code,-c                  Run and show Error/Output in new tmux window for more info use readme "
+  echo "  -s                       Choose session using Fzf"
   echo "  -H                       Track current tmux session"
   echo "  -h                       List tracked sessions and choose one interactively"
   echo "  -hn                      Jump to the next tracked session"

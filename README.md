@@ -26,6 +26,7 @@
 - fdir - Fuzzy find through directory and open a tmux session in that directory
 - [code](https://github.com/hellopradeep69/topen?tab=readme-ov-file#code-tool) - It act as Compiler/Interpreter and provide output / errors for your code
 - [ Tarpoon ](https://github.com/hellopradeep69/topen?tab=readme-ov-file#tarpoon) - tmux-harpoon that that allow you to tag a session and swap between them easily
+- Better choose-session - Choose Session using Fzf
 - readme - Hey ! i am readme
 
 ### Dependencies
