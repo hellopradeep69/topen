@@ -7,15 +7,15 @@ YELLOW="\e[33m"
 RESET="\e[0m"
 
 if [ $# -ne 1 ]; then
-    echo -e "${YELLOW}Usage:${RESET} $0 <filename>"
-    exit 1
+  echo -e "${YELLOW}Usage:${RESET} $0 <filename>"
+  exit 1
 fi
 
 FILE="$1"
 
 if [ ! -f "$FILE" ]; then
-    echo -e "${RED}Error:${RESET} File not found!"
-    exit 1
+  echo -e "${RED}Error:${RESET} File not found!"
+  exit 1
 fi
 
 DIR=$(dirname "$FILE")
@@ -25,41 +25,41 @@ CLASSNAME=$(basename "$BASENAME")
 
 # Make
 if [ -f "$DIR/Makefile" ] || [ -f "$DIR/makefile" ]; then
-    echo -e "${YELLOW}Makefile detected. Running make...${RESET}"
-    (cd "$DIR" && make)
-    echo " "
-    echo -e "${GREEN}=== OUTPUT (from Makefile) ===${RESET}"
-    (cd "$DIR" && ./$(basename "$BASENAME") 2>/dev/null || true)
-    exit $?
+  echo -e "${YELLOW}Makefile detected. Running make...${RESET}"
+  (cd "$DIR" && make)
+  echo " "
+  echo -e "${GREEN}=== OUTPUT (from Makefile) ===${RESET}"
+  (cd "$DIR" && ./$(basename "$BASENAME") 2>/dev/null || true)
+  exit $?
 fi
 
 case "$EXT" in
 py)
-    CMD=("python3" "$FILE")
-    ;;
+  CMD=("python3" "$FILE")
+  ;;
 java)
-    CMD=("bash" -c "javac \"$FILE\" && java \"$CLASSNAME\"")
-    ;;
+  CMD=("bash" -c "javac \"$FILE\" && java \"$CLASSNAME\"")
+  ;;
 c)
-    CMD=("bash" -c "gcc \"$FILE\" -o \"$BASENAME\" -lncurses && \"$BASENAME\"")
-    # CMD=("bash" -c "gcc \"$FILE\" -o \"$BASENAME\" && ./\"$BASENAME\"")
-    ;;
+  CMD=("bash" -c "gcc \"$FILE\" -o \"$BASENAME\" -lncurses && \"$BASENAME\"")
+  # CMD=("bash" -c "gcc \"$FILE\" -o \"$BASENAME\" && ./\"$BASENAME\"")
+  ;;
 cpp)
-    CMD=("bash" -c "g++ \"$FILE\" -o \"$BASENAME\" && ./\"$BASENAME\"")
-    ;;
+  CMD=("bash" -c "g++ \"$FILE\" -o \"$BASENAME\" && ./\"$BASENAME\"")
+  ;;
 sh)
-    CMD=("bash" "$FILE")
-    ;;
+  CMD=("bash" "$FILE")
+  ;;
 lua)
-    CMD=("lua" "$FILE")
-    ;;
+  CMD=("lua" "$FILE")
+  ;;
 js)
-    CMD=("node" "$FILE")
-    ;;
+  CMD=("node" "$FILE")
+  ;;
 *)
-    echo -e "${RED}Error:${RESET} Unsupported file type: $EXT"
-    exit 1
-    ;;
+  echo -e "${RED}Error:${RESET} Unsupported file type: $EXT"
+  exit 1
+  ;;
 esac
 
 echo " "
@@ -69,5 +69,5 @@ echo -e "${GREEN}=== OUTPUT ${FILE} ===${RESET}"
 EXIT_CODE=$?
 
 if [ $EXIT_CODE -ne 0 ]; then
-    echo -e "${RED}=== PROGRAM ERROR (exit code $EXIT_CODE) ===${RESET}"
+  echo -e "${RED}=== PROGRAM ERROR (exit code $EXIT_CODE) ===${RESET}"
 fi
