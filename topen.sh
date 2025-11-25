@@ -324,7 +324,7 @@ Previous_tarpoon() {
 
 Session_it() {
   tmux switch-client -t "$(
-    tmux list-sessions -F '#S #{?session_attached,*, }' |
+    tmux list-sessions -F '#S' |
       fzf --preview 'tmux capture-pane -pt {} -S -50'
   )"
 }
