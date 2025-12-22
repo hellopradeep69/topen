@@ -13,41 +13,6 @@ FILE="$2"
 CACHE="$HOME/.cache/tarpoon_cache"
 touch "$CACHE"
 
-# Code
-check_argument() {
-    if [ ! -f "$FILE" ]; then
-        echo -e "${RED}Error:${RESET} File not found!"
-        exit 1
-    fi
-}
-
-check_tmux() {
-    if [ -z "$TMUX" ]; then
-        notify-send -u normal "WARN:" "Not Inside tmux session"
-    else
-        session_name="$(tmux display-message -p '#S')"
-    fi
-}
-
-window_create() {
-
-    win_name="Code"
-    tmux kill-pane -t "$session_name:$win_name"
-
-    if ! tmux list-windows -t "$session_name" | grep -q "$win_name"; then
-        tmux new-window -t "$session_name" -n "$win_name" -c "#{pane_current_path}"
-    else
-        tmux select-window -t "$session_name:$win_name"
-    fi
-}
-
-code_start() {
-    check_argument "$FILE"
-    check_tmux
-    window_create
-    tmux send-keys -t "$session_name:$win_name" "clear;code.sh "$FILE"" Enter
-    tmux select-window -t "$session_name:$win_name"
-}
 
 # fuzzy finder tmux [Tmux sessionizer]
 exclude_dir() {
@@ -359,9 +324,6 @@ lazygit | -l)
 fdir | -f)
     open_fzf
     ;;
-code | -c)
-    code_start
-    ;;
 gitgo | -g)
     gitgo_open
     ;;
@@ -389,13 +351,11 @@ readme)
     echo "    ${0##*/} [options] [args]"
     echo "Options:"
     echo "  btop,-b                  Opens btop"
-    echo "  lf                       Opens lf from home directory"
     echo "  gitgo,-g                 Opens the currect repo in browser"
     echo "  ytdown,-yt               Opens a yt-dlp ui"
     echo "  lazygit,-l               Opens Lazygit for current directory"
     echo "  twander,-d <directory>   Pass a Directory as argument to open in a tmux session"
     echo "  fdir,-f                  Opens a fuzzy finder for directory and open in tmux session"
-    echo "  code,-c                  Run and show Error/Output in new tmux window for more info use readme "
     echo "  -s                       Choose session using Fzf"
     echo "  -H                       Track current tmux session"
     echo "  -h                       List tracked sessions and choose one interactively"

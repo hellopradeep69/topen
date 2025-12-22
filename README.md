@@ -24,7 +24,6 @@
   (if session not exists create new one )
   - **to create a session with your home directory use home argument**
 - fdir - Fuzzy find through directory and open a tmux session in that directory
-- [code](https://github.com/hellopradeep69/topen?tab=readme-ov-file#code-tool) - It act as Compiler/Interpreter and provide output / errors for your code
 - [ Tarpoon ](https://github.com/hellopradeep69/topen?tab=readme-ov-file#tarpoon) - tmux-harpoon that that allow you to tag a session and swap between them easily
 - Better choose-session - Choose Session using Fzf
 - readme - Hey ! i am readme
@@ -39,7 +38,6 @@
 6. lazygit
 7. tmux (ofcourse)
 8. fzf
-9. Language Compiler / Interpreter [for Code tool]
 
 ---
 
@@ -70,7 +68,6 @@ mv ~/topen/* ~/.local/bin/.
 ```bash
 chmod +x ~/.local/bin/topen.sh
 chmod +x ~/.local/bin/ytdown.sh
-chmod +x ~/.local/bin/code.sh
 ```
 
 ---
@@ -126,7 +123,7 @@ topen.sh -d home
 
 ---
 
-### Tarpoon
+### Tarpoon (Tmux + Harpoon)
 
 - Like [ Harpoon ](https://github.com/ThePrimeagen/harpoon/tree/harpoon2) , with tarpoon you can tag/edit a session and
   swap between them
@@ -142,90 +139,6 @@ bind-key J run-shell "tmux new-window -n 'Tarpoon' 'bash ~/.local/bin/topen.sh -
 bind-key K run-shell "tmux new-window -n 'Tarpoon' 'bash ~/.local/bin/topen.sh -hp'"
 bind-key H run-shell "tmux new-window -n 'Tarpoon' 'bash ~/.local/bin/topen.sh -H'"
 ```
-
----
-
-### Code Tool
-
-- code need some Dependencies such as javac for java and python3 for python etc to work
-
-- Language supported
-  - Python
-  - Java
-  - Lua
-  - C
-  - C++
-  - Js
-  - Bash / sh
-
-- how to use it
-  - You cant normally create a direct keybind in your .tmux.conf
-  - i am still working on it
-  - it is useless if you bind a key in your .tmux.conf as it need argument
-  - and the only way i find it useful is inside neovim [The G.O.A.T editor]
-  - inside neovim while writing code you can easily operate the tool
-  - Paste the following code in your nvim config
-  - It is suggest to paste it in your Keybind config i.e keymap.lua
-
-##### keybinds
-
-- NOTE: 'leader' should be [space] for convenience
-
-1. to open in tmux window (always save before running code)
-
-- RECOMMENDED
-
-```lua
-vim.keymap.set("n", "<leader>R", ":sil ! ~/.local/bin/topen.sh code %<CR>", {desc = "Code runner", silent = true})
-```
-
-- OR ( it saves your file every time you run it/ still above is recommended)
-
-```lua
-vim.keymap.set("n", "<leader>R", function ()
-vim.cmd("write")
-vim.cmd(":sil ! ~/.local/bin/topen.sh code %")
-end, {desc = "Code runner", silent = true})
-```
-
-2. to open inside nvim terminal
-
-```lua
-vim.keymap.set("n", "<leader>R", function ()
-local file = vim.api.nvim_buf_get_name(0)
- vim.cmd("write")
- vim.cmd("silent! ! ~/.local/bin/code " .. file)
- vim.cmd("startinsert")
- end, { desc = "Code Runner" })
-```
-
-- NOTE: vim.cmd("startinsert") is optional it is to useful exit quickly
-
-#### Known Problem that might occur
-
-1. Problem
-
-- Remember to run the desired code from the directory of the code
-- for eg nvim ~/project/java/main.java and running code will not work properly
-- be Caution not to open any other in Code window such as nvim etc [Solved]
-- it might conflict and will not work as properly [Solved]
-
-2. Solution
-
-- recommend steps to use is to cd into the dir using basic cd command or using our tool
-- Tmenux or topen fdir tool
-- for eg cd ~/project/java/
-- nvim main.java
-- and then hitting 'leader R' will work
-- Make sure you dont work in Code window in tmux
-- **_if it doesn't work report the issue_**
-
-3. Solved
-
-- previous problem that conflict while doing other work in code window is cleared
-  - [How] incase you are wondering how now the code kill the pane and reopen every time you execute it
-  - [Note] still a good habit to not do work in code pane
-  - [Why] as it will kill the pane without confirmation , and your precious work will be gone
 
 ---
 
