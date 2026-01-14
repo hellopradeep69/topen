@@ -15,11 +15,8 @@
 
 ### Feature
 
-- Btop - Opens a beautiful btop gui in your terminal
-- lf - Opens a file manager in your terminal with regard of your home directory
 - gitgo - Opens the currect repo in browser if available
 - ytdown - yep as name suggest it download yt video/audio using yt-dlp and beautiful ui
-- lazygit - opens lazygit for your cwd , only if git repo is present
 - twander - passing with directory as argument opens tmux session with cwd
   (if session not exists create new one )
   - **to create a session with your home directory use home argument**
@@ -30,12 +27,9 @@
 
 ### Dependencies
 
-1. Btop
 2. yt-dlp
-3. lf file manager
 4. git
 5. gh (optional)
-6. lazygit
 7. tmux (ofcourse)
 8. fzf
 
@@ -85,8 +79,6 @@ chmod +x ~/.local/bin/ytdown.sh
 - example setup
 
 ```bash
-bind-key o run-shell "tmux neww -n 'lf' ~/.local/bin/topen.sh lf"
-bind-key b run-shell "tmux neww -n 'Btop' ~/.local/bin/topen.sh btop"
 bind-key g run-shell "tmux neww -n 'github' ~/.local/bin/topen.sh gitgo"
 bind-key N run-shell "~/.local/bin/topen.sh -d ~/Notes/"
 bind-key H run-shell "~/.local/bin/topen.sh -d home"

@@ -306,20 +306,11 @@ check_tmux_open() {
 check_tmux_open
 
 case "$name" in
-btop | -b)
-    btop
-    ;;
 ytdown | -yt)
     ~/.local/bin/ytdown.sh
     ;;
 twander | -d)
     twander_open "$2"
-    ;;
-lf)
-    lf ~/
-    ;;
-lazygit | -l)
-    lazygit
     ;;
 fdir | -f)
     open_fzf
@@ -350,10 +341,8 @@ readme)
     echo "Usage:"
     echo "    ${0##*/} [options] [args]"
     echo "Options:"
-    echo "  btop,-b                  Opens btop"
     echo "  gitgo,-g                 Opens the currect repo in browser"
     echo "  ytdown,-yt               Opens a yt-dlp ui"
-    echo "  lazygit,-l               Opens Lazygit for current directory"
     echo "  twander,-d <directory>   Pass a Directory as argument to open in a tmux session"
     echo "  fdir,-f                  Opens a fuzzy finder for directory and open in tmux session"
     echo "  -s                       Choose session using Fzf"
