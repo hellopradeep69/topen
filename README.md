@@ -23,15 +23,17 @@
 - fdir - Fuzzy find through directory and open a tmux session in that directory
 - [ Tarpoon ](https://github.com/hellopradeep69/topen?tab=readme-ov-file#tarpoon) - tmux-harpoon that that allow you to tag a session and swap between them easily
 - Better choose-session - Choose Session using Fzf
+- W3m-wrapper - TMux + w3m wrapper
 - readme - Hey ! i am readme
 
 ### Dependencies
 
-2. yt-dlp
-4. git
-5. gh (optional)
-7. tmux (ofcourse)
-8. fzf
+1. yt-dlp
+2. git
+3. gh (optional)
+4. tmux (ofcourse)
+5. fzf
+6. w3m
 
 ---
 
@@ -80,6 +82,7 @@ chmod +x ~/.local/bin/ytdown.sh
 
 ```bash
 bind-key g run-shell "tmux neww -n 'github' ~/.local/bin/topen.sh gitgo"
+bind-key e run-shell -b "~/.local/bin/topen.sh -w3m"
 bind-key N run-shell "~/.local/bin/topen.sh -d ~/Notes/"
 bind-key H run-shell "~/.local/bin/topen.sh -d home"
 ```
@@ -91,6 +94,16 @@ bind-key H run-shell "~/.local/bin/topen.sh -d home"
 - just learn using tmux its beautiful and very productive
 - it aint that tough !
 - '\_'
+
+### W3m-wrapper
+----------
+- in the fzf input write , w3m <queries>
+
+```sh
+w3m python array
+```
+
+- This will open w3m with the given queries in a horizontal split pane in the tmux window .
 
 ---
 
