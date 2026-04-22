@@ -6,6 +6,10 @@ name="$1"
 CACHE="$HOME/.cache/tarpoon_cache"
 touch "$CACHE"
 
+# for History
+HISTORY_CACHE="$HOME/.cache/HISTORY_cache"
+touch "$HISTORY_CACHE"
+
 # fuzzy finder tmux [Tmux sessionizer]
 exclude_dir() {
 	EXCLUDE_DIRS=(~/.tmux ~/Templates ~/.cache ~/.rustup ~/.npm ~/.zen ~/.linuxmint
@@ -289,15 +293,27 @@ Session_it() {
 
 # W3m+tmux wrapper
 Link_search() {
-	tmux capture-pane -J -p | grep -oE '(http|https)://[a-zA-Z0-9+./?=_%:-]+' | sort -t: -u | fzf-tmux -d20 --multi --print-query
+	(echo "History" && tmux capture-pane -J -p | grep -oE '(http|https)://[a-zA-Z0-9+./?=_%:-]+' | sort -t: -u) | fzf-tmux -d20 --multi --print-query
+}
+
+W3m_history() {
+	local query=$(cat $HISTORY_CACHE | fzf-tmux -d20 --multi --print-query)
+	if [[ -n "$query" ]]; then
+		tmux splitw -d "w3m 'https://lite.duckduckgo.com/lite/?q=${query// /+}'"
+	fi
 }
 
 W3m_tmux() {
 	link=$(Link_search)
 	browser=$(echo $link | awk '{print $1}')
 	query=$(echo $link | sed "s/w3m//")
-	if [[ $browser = w3m ]]; then
+	if [[ -n "$query" && $query != *History* ]]; then
+		echo $query >>$HISTORY_CACHE
+	fi
+	if [[ $browser = "w3m" ]]; then
 		tmux splitw -d "w3m 'https://lite.duckduckgo.com/lite/?q=${query// /+}'"
+	elif [[ $browser = "History" ]]; then
+		W3m_history
 	else
 		echo $link | xargs -r xdg-open
 	fi
