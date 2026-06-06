@@ -10,6 +10,10 @@ touch "$CACHE"
 HISTORY_CACHE="$HOME/.cache/HISTORY_cache"
 touch "$HISTORY_CACHE"
 
+# for ssh
+SSH_CACHE="$HOME/.cache/ssh_cache"
+touch "$SSH_CACHE"
+
 # fuzzy finder tmux [Tmux sessionizer]
 exclude_dir() {
 	EXCLUDE_DIRS=(~/.tmux ~/Templates ~/.cache ~/.rustup ~/.npm ~/.zen ~/.linuxmint
@@ -291,6 +295,24 @@ Session_it() {
 	)"
 }
 
+# Ssh Wrapper
+Ssh_read() {
+	head -n 1 "$SSH_CACHE"
+}
+
+Ssh_open() {
+	tmux popup -E nvim -c "set ls=0" "$SSH_CACHE"
+
+	Ssh_host=$(Ssh_read)
+	Ssh_username=$(echo "$Ssh_host" | sed "s/@.*//")
+
+	if ! tmux has-session -t "$Ssh_username" 2>/dev/null; then
+		tmux new-session -ds "$Ssh_username" -c "$HOME" "ssh -p 8022 $Ssh_host"
+	fi
+	tmux switch-client -t "$Ssh_username"
+
+}
+
 # W3m+tmux wrapper
 Link_search() {
 	(echo "History" && tmux capture-pane -J -p | grep -oE '(http|https)://[a-zA-Z0-9+./?=_%:-]+' | sort -t: -u) | fzf-tmux -d20 --multi --print-query
@@ -348,6 +370,9 @@ readme)
 	;;
 -w3m)
 	W3m_tmux
+	;;
+-ssh)
+	Ssh_open
 	;;
 -s)
 	Session_it
