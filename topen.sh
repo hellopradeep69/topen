@@ -297,7 +297,7 @@ Session_it() {
 
 # Ssh Wrapper
 Ssh_read() {
-	head -n 1 "$SSH_CACHE"
+	head -n 1 "$SSH_CACHE" | sed "s/#.*//g"
 }
 
 Ssh_open() {
